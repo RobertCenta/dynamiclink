@@ -1,89 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centavizer - Get the App</title>
-    
-    <!-- Preconnect for faster redirects -->
-    <link rel="preconnect" href="https://apps.apple.com">
-    <link rel="preconnect" href="https://play.google.com">
-    
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #667eea;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-        }
-        
-        .container {
-            padding: 2rem;
-        }
-        
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            font-weight: 300;
-        }
-        
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 1rem auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centavizer App Redirect</title>
+  <script>
+    window.onload = function() {
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      // iOS detection (iPhone, iPad, iPod)
+      if (/iPhone|iPad|iPod/i.test(userAgent)) {
+        window.location.href = "https://apps.apple.com/us/app/centavizer/id6743423856";
+        return;
+      }
+
+      // Android detection - covers all variations
+      if (/android/i.test(userAgent)) {
+        window.location.href = "https://play.google.com/store/apps/details?id=com.centavizers";
+        return;
+      }
+
+      // Fallback - send to your website or a landing page
+      window.location.href = "https://centavizer.com";
+    }
+  </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Centavizer</h1>
-        <div class="spinner"></div>
-        <p>Redirecting to app store...</p>
-    </div>
-
-    <script>
-        (function() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            let redirectUrl;
-            
-            // Detect iOS devices
-            if (/iphone|ipad|ipod/.test(userAgent)) {
-                redirectUrl = 'https://apps.apple.com/us/app/centavizer/id6743423856';
-            }
-            // Detect Android devices  
-            else if (userAgent.includes('android')) {
-                redirectUrl = 'https://play.google.com/store/apps/details?id=com.centavizers';
-            }
-            // Default fallback for desktop/other
-            else {
-                redirectUrl = 'https://apps.apple.com/us/app/centavizer/id6743423856';
-            }
-            
-            // Redirect after short delay
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 800);
-        })();
-    </script>
+  <p>Redirecting to the Centavizer app...</p>
 </body>
 </html> 
