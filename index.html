@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centavizer - Redirecting...</title>
+    
+    <!-- Preconnect to redirect domains for faster loading -->
+    <link rel="preconnect" href="https://play.google.com">
+    <link rel="preconnect" href="https://apps.apple.com">
+    <link rel="preconnect" href="https://centavizer.com">
+    
+    <!-- Inline CSS for fastest loading -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 400px;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1.5rem auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hide content during redirect for smoother UX */
+        .redirecting {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Centavizer</h1>
+        <div class="spinner"></div>
+        <p id="status">Redirecting...</p>
+    </div>
+
+    <script>
+        // Immediately Invoked Function Expression (IIFE) for clean execution
+        (function() {
+            'use strict';
+            
+            // Configuration object for easy maintenance
+            const CONFIG = {
+                redirectUrls: {
+                    android: 'https://play.google.com/store/apps/details?id=com.centavizers&pli=1',
+                    ios: 'https://apps.apple.com/us/app/centavizer/id6743423856',
+                    desktop: 'https://centavizer.com'
+                },
+                redirectDelay: 500 // ms - small delay for better UX
+            };
+            
+            /**
+             * Detects the user's device type based on navigator.userAgent
+             * @returns {string} Device type: 'android', 'ios', or 'desktop'
+             */
+            function detectDevice() {
+                const userAgent = navigator.userAgent.toLowerCase();
+                
+                // Check for Android devices
+                if (userAgent.includes('android')) {
+                    return 'android';
+                }
+                
+                // Check for iOS devices (iPhone, iPad, iPod)
+                if (/iphone|ipad|ipod/.test(userAgent)) {
+                    return 'ios';
+                }
+                
+                // Default to desktop for all other devices
+                return 'desktop';
+            }
+            
+            /**
+             * Logs analytics data to console and prepares for server logging
+             * @param {string} deviceType - Detected device type
+             * @param {string} redirectUrl - URL being redirected to
+             */
+            function logAnalytics(deviceType, redirectUrl) {
+                const analyticsData = {
+                    deviceType: deviceType,
+                    userAgent: navigator.userAgent,
+                    timestamp: new Date().toISOString(),
+                    redirectUrl: redirectUrl,
+                    referrer: document.referrer || 'direct',
+                    screenResolution: `${screen.width}x${screen.height}`,
+                    language: navigator.language
+                };
+                
+                // Log to console for debugging
+                console.log('Device Detection & Redirect Analytics:', analyticsData);
+                
+                // TODO: Add server logging here when needed
+                // Example implementation:
+                /*
+                fetch('/api/analytics', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(analyticsData)
+                }).catch(err => console.warn('Analytics logging failed:', err));
+                */
+            }
+            
+            /**
+             * Performs the redirect to the appropriate URL
+             * @param {string} url - URL to redirect to
+             */
+            function performRedirect(url) {
+                // Add redirecting class for visual feedback
+                document.body.classList.add('redirecting');
+                
+                // Use window.location.href for better compatibility
+                // than window.location.replace()
+                window.location.href = url;
+            }
+            
+            /**
+             * Main execution function
+             */
+            function main() {
+                try {
+                    // Detect device type
+                    const deviceType = detectDevice();
+                    const redirectUrl = CONFIG.redirectUrls[deviceType];
+                    
+                    // Update status message
+                    const statusElement = document.getElementById('status');
+                    statusElement.textContent = `Redirecting to ${deviceType === 'desktop' ? 'website' : deviceType + ' app'}...`;
+                    
+                    // Log analytics
+                    logAnalytics(deviceType, redirectUrl);
+                    
+                    // Perform redirect after short delay for better UX
+                    setTimeout(() => {
+                        performRedirect(redirectUrl);
+                    }, CONFIG.redirectDelay);
+                    
+                } catch (error) {
+                    console.error('Redirect error:', error);
+                    // Fallback to desktop redirect on error
+                    setTimeout(() => {
+                        performRedirect(CONFIG.redirectUrls.desktop);
+                    }, CONFIG.redirectDelay);
+                }
+            }
+            
+            // Execute immediately when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', main);
+            } else {
+                main();
+            }
+            
+        })();
+    </script>
+</body>
+</html> 
